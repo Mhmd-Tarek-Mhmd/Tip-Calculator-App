@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Page Metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Page Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
+    <title>Tip calculator app | Frontend Mentor</title>
+    <!-- Font Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap"
+    />
+    <!-- Page Style -->
+    <style>
+      /* Global Style */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Space Mono", monospace;
+        background-color: hsl(185, 41%, 84%);
+        user-select: none;
+      }
+
+      /* Page Style */
+      .app {
+        min-width: 300px;
+        max-width: 450px;
+        margin: auto;
+      }
+      @media (min-width: 800px) {
+        .app {
+          max-width: 800px;
+        }
+      }
+      .logo {
+        margin: 50px auto 40px;
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+      .error-message {
+        position: absolute;
+        top: -29px;
+        right: 0;
+        color: hsl(15deg 32% 58%);
+      }
+      .percentage {
+        font-weight: 400;
+      }
+
+      /* [1] Form elements */
+      form {
+        background-color: hsl(0, 0%, 100%);
+        border-radius: 20px;
+        padding: 32px;
+      }
+      @media (min-width: 800px) {
+        form {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+      fieldset {
+        margin-bottom: 35px;
+        border: none;
+        position: relative;
+      }
+      legend {
+        color: hsl(186, 14%, 43%);
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      input,
+      label {
+        border-radius: 5px;
+        border: none;
+        height: 48px;
+        font-weight: 700;
+        font-size: 24px;
+      }
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+      input::placeholder {
+        color: hsl(184, 14%, 56%);
+      }
+      input:focus-visible {
+        outline-color: hsl(172, 67%, 45%);
+      }
+      input:invalid {
+        border: 1px solid hsl(15deg 32% 58%);
+        outline-color: hsl(15deg 32% 58%);
+      }
+
+      input[type="number"] {
+        color: hsl(183, 100%, 15%);
+        direction: rtl;
+        font-family: inherit;
+        background-color: hsl(189, 41%, 97%);
+        width: 100%;
+        padding: 0 15px;
+        -moz-appearance: textfield;
+      }
+      input[type="radio"] {
+        width: 0;
+      }
+      input[type="reset"] {
+        width: 100%;
+        cursor: pointer;
+        text-transform: uppercase;
+        align-self: flex-end;
+      }
+      input[type="reset"]:disabled {
+        opacity: 0.1;
+        pointer-events: none;
+      }
+
+      label {
+        background-color: hsl(183, 100%, 15%);
+        color: hsl(189, 41%, 97%);
+        width: 100%;
+        text-align: center;
+        line-height: 48px;
+        cursor: pointer;
+      }
+      input:checked + label,
+      input[type="reset"] {
+        background-color: hsl(172, 67%, 45%);
+        color: hsl(183, 100%, 15%);
+      }
+      label:hover,
+      input[type="reset"]:hover {
+        background-color: hsl(173deg 61% 77%);
+        color: hsl(183, 100%, 15%);
+      }
+
+      /* [2] Controls */
+      fieldset > div {
+        position: relative;
+      }
+      fieldset > div img {
+        position: absolute;
+        left: 15px;
+        bottom: 16px;
+      }
+      fieldset:nth-of-type(2) > div {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 16px;
+      }
+      @media (min-width: 450px) {
+        fieldset:nth-of-type(2) > div {
+          grid-template-columns: repeat(3, 117px);
+          grid-template-rows: repeat(2, 1fr);
+        }
+      }
+      fieldset:nth-of-type(2) > div > div {
+        display: flex;
+      }
+
+      /* [3] Results */
+      .results {
+        background-color: hsl(183, 100%, 15%);
+        border-radius: 15px;
+        padding: 25px;
+        font-weight: 700;
+        display: grid;
+        align-items: center;
+      }
+      @media (min-width: 800px) {
+        .results {
+          min-width: 311px;
+        }
+      }
+      .results > div > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 35px;
+      }
+      .results p {
+        color: hsl(189, 41%, 97%);
+      }
+      .results p span {
+        color: hsl(186, 14%, 43%);
+        font-size: 15px;
+      }
+      .results .result {
+        color: hsl(172, 67%, 45%);
+        font-size: 2.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <img src="images/logo.svg" alt="Logo" class="logo" />
+      <form onreset="formResetActions()">
+        <!-- Controls -->
+        <div class="controls">
+          <!-- [1] Bill -->
+          <fieldset>
+            <legend>Bill</legend>
+            <div>
+              <input
+                type="number"
+                id="bill"
+                placeholder="0"
+                min="1"
+                step="0.01"
+                onkeydown="return event.keyCode !== 69;"
+              />
+              <img src="images/icon-dollar.svg" alt="Dollar Sign" />
+            </div>
+          </fieldset>
+
+          <!-- [2] Tip -->
+          <fieldset>
+            <legend>Select Tip <span class="percentage">%</span></legend>
+            <div>
+              <div>
+                <input type="radio" value="5" name="tip-radio" id="radio-1" />
+                <label for="radio-1">5<span class="percentage">%</span></label>
+              </div>
+              <div>
+                <input type="radio" value="10" name="tip-radio" id="radio-2" />
+                <label for="radio-2">10<span class="percentage">%</span></label>
+              </div>
+              <div>
+                <input type="radio" value="15" name="tip-radio" id="radio-3" />
+                <label for="radio-3">15<span class="percentage">%</span></label>
+              </div>
+              <div>
+                <input type="radio" value="25" name="tip-radio" id="radio-4" />
+                <label for="radio-4">25<span class="percentage">%</span></label>
+              </div>
+              <div>
+                <input type="radio" value="50" name="tip-radio" id="radio-5" />
+                <label for="radio-5">50<span class="percentage">%</span></label>
+              </div>
+              <input
+                type="number"
+                id="tip"
+                placeholder="Custom"
+                min="1"
+                max="100"
+                step="0.01"
+                onkeydown="return event.keyCode !== 69;"
+              />
+            </div>
+          </fieldset>
+
+          <!-- [3] People -->
+          <fieldset>
+            <legend>Number of People</legend>
+            <div>
+              <input
+                type="number"
+                id="people"
+                placeholder="0"
+                min="1"
+                onkeydown="return event.keyCode !== 69;"
+              />
+              <img src="images/icon-person.svg" alt="Avatar" />
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Results -->
+        <div class="results">
+          <div>
+            <div class="tip-amount">
+              <p>Tip Amount<br /><span>/ person</span></p>
+              <div class="result"><small>$</small><span>0.00</span></div>
+            </div>
+
+            <div class="total">
+              <p>Total<br /><span>/ person</span></p>
+              <div class="result"><small>$</small><span>0.00</span></div>
+            </div>
+          </div>
+
+          <input type="reset" disabled />
+        </div>
+      </form>
+    </div>
+
+    <script>
+      /* Global Variables */
+      const resetButton = document.querySelector("input[type=reset]"),
+        billVal = document.getElementById("bill"),
+        tipVal = document.getElementById("tip"),
+        peopleNum = document.getElementById("people"),
+        totalTip = document.querySelector(".results .tip-amount .result span"),
+        totalVal = document.querySelector(".results .total .result span");
+
+      /* Helper Functions */
+      function showErrorMessage(target) {
+        const node = document.createElement("p");
+        const id = `${target.id}-msg`;
+
+        node.id = id;
+        node.className = "error-message";
+        node.textContent =
+          target.value === "0" ? "Can't be zero." : "Enter a valid number";
+
+        document.querySelectorAll(`#${id}`).length === 0 &&
+          target.parentElement.parentElement.appendChild(node);
+      }
+      function removeErrorMessage(target) {
+        const errorMsg = document.querySelector(`#${target.id}-msg`);
+        errorMsg !== null && errorMsg.remove();
+      }
+
+      function toCurrency(val) {
+        const dataPrice = [
+          [10e45, "ak"],
+          [10e42, "aj"],
+          [10e39, "ai"],
+          [10e36, "ah"],
+          [10e33, "ag"],
+          [10e30, "af"],
+          [10e27, "ae"],
+          [10e24, "ad"],
+          [10e21, "ac"],
+          [10e18, "ab"],
+          [10e15, "aa"],
+          [10e12, "T"],
+          [10e9, "B"],
+          [10e6, "M"],
+          [10e3, "K"],
+        ];
+
+        for (let i = 0; i < dataPrice.length; i++) {
+          const ele = dataPrice[i];
+          let price = val / ele[0];
+
+          if (price > 1) {
+            return `${price.toFixed(2)}${ele[1]}`;
+            break;
+          }
+        }
+        return val.toFixed(2);
+      }
+      function showResults(checkedBtn) {
+        const tipValue = checkedBtn !== null ? checkedBtn.value : tipVal.value;
+
+        if (
+          billVal.checkValidity() &
+          tipVal.checkValidity() &
+          peopleNum.checkValidity() &
+          (billVal.value.length > 0) &
+          (peopleNum.value.length > 0) &
+          (tipValue.length > 0)
+        ) {
+          // Tip value per person
+          totalTip.textContent = toCurrency(
+            (billVal.value * (tipValue / 100)) / peopleNum.value
+          );
+
+          // Total payment per person
+          totalVal.textContent = toCurrency(
+            billVal.value / peopleNum.value + parseFloat(totalTip.textContent)
+          );
+        } else {
+          totalTip.textContent = "0.00";
+          totalVal.textContent = "0.00";
+        }
+      }
+
+      function formResetActions() {
+        resetButton.setAttribute("disabled", true);
+        document.querySelectorAll(".error-message").forEach((e) => e.remove());
+        totalTip.textContent = "0.00";
+        totalVal.textContent = "0.00";
+      }
+      function labelClickActions(e) {
+        const tipErrorMsg = document.querySelector("#tip-msg");
+
+        resetButton.removeAttribute("disabled"); // Enable reset button
+        tipVal.value.length ? (tipVal.value = null) : null; // Switch between radio btns & number input
+        tipErrorMsg !== null && tipErrorMsg.remove(); // Remove error message
+        showResults(document.getElementById(e.getAttribute("for"))); // Do the math!
+      }
+
+      /* App Logic */
+      document
+        .querySelectorAll("label")
+        .forEach((ele) => (ele.onclick = (e) => labelClickActions(e.target)));
+
+      document.querySelectorAll("input[type=number]").forEach((input, i) => {
+        input.addEventListener("keyup", (e) => {
+          let checkedBtn = document.querySelector("input[type=radio]:checked");
+
+          // [1] Disable & Enable reset button
+          resetButton.disabled =
+            billVal.value.length ||
+            tipVal.value.length ||
+            peopleNum.value.length
+              ? false
+              : true;
+
+          // [2] Switch between radio btns & number input
+          (e.target.placeholder === "Custom") & (checkedBtn !== null) &&
+            (e.target.value.length ? (checkedBtn.checked = false) : null);
+
+          // [3] Show & Remove error message
+          !e.target.checkValidity()
+            ? showErrorMessage(e.target)
+            : removeErrorMessage(e.target);
+
+          // [4] Do the math!
+          showResults(checkedBtn);
+        });
+      });
+    </script>
+  </body>
+</html>
