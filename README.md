@@ -5,7 +5,7 @@ This is a solution to the [Tip calculator app challenge on Frontend Mentor](http
 ## Links
 
 - Live Site [URL](https://mhmd-tarek-mhmd.github.io/Tip-Calculator-MVC-App)
-- Solution [URL](https://www.frontendmentor.io/solutions/tip-calculator-mvc-app)
+- Solution [URL](https://www.frontendmentor.io/solutions/tip-calculator-mvc-app-picYIq7xa)
 
 ## Screenshots
 
