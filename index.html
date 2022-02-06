@@ -1,432 +1,500 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Page Metadata -->
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Page Favicon -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./images/favicon-32x32.png"
-    />
-    <title>Tip calculator app | Frontend Mentor</title>
-    <!-- Font Style -->
+    <title>Tip calculator app</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap"
     />
-    <!-- Page Style -->
     <style>
-      /* Global Style */
+      /* Global style */
+      :root {
+        --primary: hsl(172, 67%, 45%);
+        --secondary: hsl(183, 100%, 15%);
+        --gray: hsl(184, 14%, 56%);
+        --red: #b48372;
+      }
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
       body {
+        user-select: none;
         font-family: "Space Mono", monospace;
         background-color: hsl(185, 41%, 84%);
-        user-select: none;
       }
-
-      /* Page Style */
-      .app {
-        min-width: 300px;
-        max-width: 450px;
-        margin: auto;
-      }
-      @media (min-width: 800px) {
-        .app {
-          max-width: 800px;
-        }
-      }
-      .logo {
-        margin: 50px auto 40px;
-        display: block;
-        max-width: 100%;
-        height: auto;
-      }
-      .error-message {
-        position: absolute;
-        top: -29px;
-        right: 0;
-        color: hsl(15deg 32% 58%);
-      }
-      .percentage {
-        font-weight: 400;
-      }
-
-      /* [1] Form elements */
-      form {
-        background-color: hsl(0, 0%, 100%);
-        border-radius: 20px;
-        padding: 32px;
-      }
-      @media (min-width: 800px) {
-        form {
-          display: flex;
-          justify-content: space-between;
-        }
-      }
-      fieldset {
-        margin-bottom: 35px;
-        border: none;
-        position: relative;
-      }
-      legend {
-        color: hsl(186, 14%, 43%);
-        font-weight: 700;
-        margin-bottom: 10px;
-      }
-
+      strong,
       input,
-      label {
-        border-radius: 5px;
-        border: none;
+      button,
+      a {
+        display: inline-block;
+      }
+      button,
+      input {
         height: 48px;
-        font-weight: 700;
-        font-size: 24px;
+        border: none;
+        color: inherit;
+        background: none;
+        border-radius: 5px;
+        font: 700 24px "Space Mono";
+      }
+      input:focus,
+      button:focus {
+        outline-color: var(--primary);
       }
       input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {
         -webkit-appearance: none;
+        appearance: none;
       }
-      input::placeholder {
-        color: hsl(184, 14%, 56%);
-      }
-      input:focus-visible {
-        outline-color: hsl(172, 67%, 45%);
-      }
-      input:invalid {
-        border: 1px solid hsl(15deg 32% 58%);
-        outline-color: hsl(15deg 32% 58%);
+      ::placeholder {
+        font: inherit;
+        color: var(--gray);
       }
 
-      input[type="number"] {
-        color: hsl(183, 100%, 15%);
-        direction: rtl;
-        font-family: inherit;
-        background-color: hsl(189, 41%, 97%);
-        width: 100%;
-        padding: 0 15px;
-        -moz-appearance: textfield;
-      }
-      input[type="radio"] {
-        width: 0;
-      }
-      input[type="reset"] {
-        width: 100%;
-        cursor: pointer;
-        text-transform: uppercase;
-        align-self: flex-end;
-      }
-      input[type="reset"]:disabled {
-        opacity: 0.1;
-        pointer-events: none;
-      }
+      /* App style */
 
-      label {
-        background-color: hsl(183, 100%, 15%);
-        color: hsl(189, 41%, 97%);
-        width: 100%;
+      .logo {
         text-align: center;
-        line-height: 48px;
-        cursor: pointer;
+        margin: 50px 0 30px;
       }
-      input:checked + label,
-      input[type="reset"] {
-        background-color: hsl(172, 67%, 45%);
-        color: hsl(183, 100%, 15%);
+      .calc,
+      .controls,
+      .tip,
+      .results {
+        display: grid;
       }
-      label:hover,
-      input[type="reset"]:hover {
-        background-color: hsl(173deg 61% 77%);
-        color: hsl(183, 100%, 15%);
+      .calc {
+        border-radius: 10px;
+        background-color: white;
+        grid-template-columns: 1fr;
+      }
+      .calc button {
+        color: var(--secondary);
+        background-color: var(--primary);
       }
 
-      /* [2] Controls */
-      fieldset > div {
+      /* [1] Controls */
+
+      .controls {
+        gap: 32px;
+        margin: 32px;
+      }
+      .controls .title {
+        font-size: 1.1em;
+        color: hsl(186, 14%, 43%);
+      }
+      .controls strong.title {
+        margin-bottom: 4px;
+      }
+      .controls .input {
         position: relative;
       }
-      fieldset > div img {
+      .controls input {
+        width: 100%;
+        text-align: right;
+        padding-right: 18px;
+        color: var(--secondary);
+        background-color: hsl(189, 41%, 97%);
+      }
+      .controls .icon {
+        top: 50%;
+        left: 18px;
         position: absolute;
-        left: 15px;
-        bottom: 16px;
-      }
-      fieldset:nth-of-type(2) > div {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: 16px;
-      }
-      @media (min-width: 450px) {
-        fieldset:nth-of-type(2) > div {
-          grid-template-columns: repeat(3, 117px);
-          grid-template-rows: repeat(2, 1fr);
-        }
-      }
-      fieldset:nth-of-type(2) > div > div {
-        display: flex;
+        transform: translateY(-50%);
       }
 
-      /* [3] Results */
+      .controls .error {
+        position: relative;
+      }
+      .controls [role="alert"] {
+        color: var(--red);
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: none;
+      }
+      .controls .error [role="alert"] {
+        display: block;
+      }
+      .controls .error input {
+        outline: 2px solid var(--red);
+      }
+
+      .controls .tip {
+        gap: 16px;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .tip .title {
+        grid-column: 1 / -1;
+      }
+      .tip button[aria-checked="false"] {
+        color: white;
+        background-color: var(--secondary);
+      }
+
+      /* [2] Results */
+
       .results {
-        background-color: hsl(183, 100%, 15%);
-        border-radius: 15px;
-        padding: 25px;
-        font-weight: 700;
-        display: grid;
-        align-items: center;
+        gap: 24px;
+        color: white;
+        border-radius: 10px;
+        margin: 0 24px 32px;
+        padding: 32px 24px 24px;
+        background-color: var(--secondary);
       }
-      @media (min-width: 800px) {
-        .results {
-          min-width: 311px;
-        }
-      }
-      .results > div > div {
+      .results > div {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 35px;
+        justify-content: space-between;
       }
       .results p {
-        color: hsl(189, 41%, 97%);
+        font-size: 1.1em;
+        font-weight: 700;
       }
-      .results p span {
-        color: hsl(186, 14%, 43%);
-        font-size: 15px;
+      .results small {
+        color: var(--gray);
       }
-      .results .result {
-        color: hsl(172, 67%, 45%);
-        font-size: 2.2em;
+      .results .num {
+        width: 60%;
+        outline: none;
+        font-size: 2em;
+        text-align: right;
+        color: var(--primary);
+      }
+      .results button {
+        align-self: end;
+      }
+      .results button:disabled {
+        opacity: 0.3;
+      }
+
+      /* Media Queries */
+
+      @media screen and (min-width: 500px) and (max-width: 767px) {
+        .app {
+          padding: 0 15px 15px;
+        }
+      }
+      @media screen and (min-width: 768px) {
+        body {
+          display: flex;
+          min-height: 100vh;
+          align-items: center;
+          justify-content: center;
+        }
+        .logo {
+          margin: 0 auto 78px;
+        }
+        .calc {
+          margin: 0 auto;
+          max-width: 920px;
+          grid-template-columns: 1fr 1fr;
+        }
+        .controls {
+          gap: 38px;
+          margin: 48px;
+        }
+        .controls .tip {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .results {
+          gap: 0;
+          margin: 32px;
+          align-items: start;
+          padding: 60px 40px 40px;
+        }
+        .results .num {
+          font-size: 2.5em;
+        }
+      }
+      @media screen and (min-width: 768px) and (max-height: 650px) {
+        .app {
+          padding: 50px 0;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="app">
-      <img src="images/logo.svg" alt="Logo" class="logo" />
-      <form onreset="formResetActions()">
-        <!-- Controls -->
-        <div class="controls">
-          <!-- [1] Bill -->
-          <fieldset>
-            <legend>Bill</legend>
-            <div>
-              <input
-                type="number"
-                id="bill"
-                placeholder="0"
-                min="1"
-                step="0.01"
-                onkeydown="return event.keyCode !== 69;"
-              />
-              <img src="images/icon-dollar.svg" alt="Dollar Sign" />
-            </div>
-          </fieldset>
+    <main>
+      <section class="app">
+        <h1 class="logo" aria-label="Splitter Logo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="87"
+            height="54"
+            aria-hidden="true"
+          >
+            <path
+              fill="#3D6666"
+              d="M6.72 17.472c.944 0 1.792-.12 2.544-.36s1.392-.584 1.92-1.032a4.476 4.476 0 001.212-1.62c.28-.632.42-1.34.42-2.124v-.288c0-1.472-.464-2.584-1.392-3.336-.928-.752-2.272-1.288-4.032-1.608a14.615 14.615 0 01-1.74-.408c-.456-.144-.824-.308-1.104-.492-.28-.184-.476-.392-.588-.624a1.771 1.771 0 01-.168-.78c0-.56.232-1.004.696-1.332.464-.328 1.096-.492 1.896-.492.944 0 1.676.248 2.196.744.52.496.78 1.08.78 1.752v.576h3.168v-.864a5 5 0 00-.396-1.968 4.762 4.762 0 00-1.176-1.656C10.436 1.08 9.792.7 9.024.42 8.256.14 7.376 0 6.384 0c-.88 0-1.676.12-2.388.36s-1.32.576-1.824 1.008c-.504.432-.896.94-1.176 1.524-.28.584-.42 1.22-.42 1.908v.144c0 .832.144 1.536.432 2.112a3.978 3.978 0 001.212 1.44c.52.384 1.132.692 1.836.924.704.232 1.48.42 2.328.564.64.112 1.168.248 1.584.408.416.16.744.34.984.54s.408.424.504.672c.096.248.144.508.144.78 0 .576-.232 1.072-.696 1.488-.464.416-1.176.624-2.136.624-1.232 0-2.14-.3-2.724-.9-.584-.6-.876-1.404-.876-2.412v-.576H0v.72c0 .88.144 1.692.432 2.436a5.47 5.47 0 001.272 1.944c.56.552 1.26.984 2.1 1.296.84.312 1.812.468 2.916.468zm22-.336V10.8h3.408c.864 0 1.616-.144 2.256-.432a4.707 4.707 0 001.596-1.14 4.833 4.833 0 00.96-1.608c.216-.6.324-1.212.324-1.836v-.576c0-.608-.108-1.204-.324-1.788a4.625 4.625 0 00-.96-1.56A4.737 4.737 0 0034.384.756c-.64-.28-1.392-.42-2.256-.42h-6.576v16.8h3.168zm3.096-9.36H28.72V3.36h3.096c.704 0 1.26.192 1.668.576.408.384.612.88.612 1.488v.288c0 .608-.204 1.104-.612 1.488-.408.384-.964.576-1.668.576zm29.464 9.36v-3.024h-7.632V.336H50.48v16.8h10.8zm24.88 0v-3.024h-4.032V3.36h4.032V.336H74.928V3.36h4.032v10.752h-4.032v3.024H86.16zm-78.096 36V39.36h4.464v-3.024H.432v3.024h4.464v13.776h3.168zm24.688 0V39.36h4.464v-3.024H25.12v3.024h4.464v13.776h3.168zm28.624 0v-3.024h-7.728v-3.888H60.8V43.2h-7.152v-3.84h7.44v-3.024H50.48v16.8h10.896zm16.744 0V46.8h3.648c.464 0 .796.12.996.36.2.24.3.552.3.936v5.04h3.168v-5.808c0-.56-.164-1.024-.492-1.392-.328-.368-.772-.584-1.332-.648v-.432c.768-.32 1.336-.78 1.704-1.38a3.63 3.63 0 00.552-1.932v-.576c0-.64-.116-1.24-.348-1.8a4.332 4.332 0 00-1.008-1.476c-.44-.424-.988-.756-1.644-.996-.656-.24-1.416-.36-2.28-.36h-6.432v16.8h3.168zm3.024-9.36H78.12V39.36h3.024c.768 0 1.352.204 1.752.612.4.408.6.892.6 1.452v.288c0 .656-.2 1.164-.6 1.524-.4.36-.984.54-1.752.54z"
+            />
+          </svg>
+        </h1>
 
-          <!-- [2] Tip -->
-          <fieldset>
-            <legend>Select Tip <span class="percentage">%</span></legend>
-            <div>
-              <div>
-                <input type="radio" value="5" name="tip-radio" id="radio-1" />
-                <label for="radio-1">5<span class="percentage">%</span></label>
+        <form class="calc" onsubmit="event.preventDefault()">
+          <!-- [1] Controls -->
+          <div class="controls">
+            <label>
+              <strong class="title">Bill</strong>
+              <div class="input">
+                <input type="number" name="bill" placeholder="0" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="11"
+                  height="17"
+                  class="icon"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="#9EBBBD"
+                    d="M6.016 16.328v-1.464c1.232-.08 2.22-.444 2.964-1.092.744-.648 1.116-1.508 1.116-2.58v-.144c0-.992-.348-1.772-1.044-2.34-.696-.568-1.708-.932-3.036-1.092V4.184c.56.144 1.012.4 1.356.768.344.368.516.816.516 1.344v.288h1.824v-.432c0-.448-.088-.876-.264-1.284a3.783 3.783 0 00-.744-1.116A4.251 4.251 0 007.54 2.9a5.324 5.324 0 00-1.524-.492V.872H4.288V2.36a5.532 5.532 0 00-1.416.324c-.448.168-.84.392-1.176.672-.336.28-.604.616-.804 1.008-.2.392-.3.844-.3 1.356v.144c0 .96.316 1.708.948 2.244.632.536 1.548.884 2.748 1.044v3.912c-.704-.16-1.248-.472-1.632-.936-.384-.464-.576-1.08-.576-1.848v-.288H.256v.576c0 .464.08.924.24 1.38.16.456.404.88.732 1.272.328.392.744.728 1.248 1.008s1.108.476 1.812.588v1.512h1.728zM4.288 7.424c-.688-.128-1.164-.332-1.428-.612-.264-.28-.396-.644-.396-1.092 0-.464.176-.832.528-1.104.352-.272.784-.448 1.296-.528v3.336zm1.728 5.712V9.344c.768.128 1.328.328 1.68.6.352.272.528.688.528 1.248 0 .544-.196.984-.588 1.32-.392.336-.932.544-1.62.624z"
+                  />
+                </svg>
               </div>
-              <div>
-                <input type="radio" value="10" name="tip-radio" id="radio-2" />
-                <label for="radio-2">10<span class="percentage">%</span></label>
-              </div>
-              <div>
-                <input type="radio" value="15" name="tip-radio" id="radio-3" />
-                <label for="radio-3">15<span class="percentage">%</span></label>
-              </div>
-              <div>
-                <input type="radio" value="25" name="tip-radio" id="radio-4" />
-                <label for="radio-4">25<span class="percentage">%</span></label>
-              </div>
-              <div>
-                <input type="radio" value="50" name="tip-radio" id="radio-5" />
-                <label for="radio-5">50<span class="percentage">%</span></label>
-              </div>
+            </label>
+
+            <div class="tip">
+              <h3 class="title" id="label">Select Tip %</h3>
+
+              <button
+                type="button"
+                role="switch"
+                aria-checked="false"
+                value="5"
+              >
+                5%
+              </button>
+              <button
+                type="button"
+                role="switch"
+                aria-checked="false"
+                value="10"
+              >
+                10%
+              </button>
+              <button
+                type="button"
+                role="switch"
+                aria-checked="false"
+                value="15"
+              >
+                15%
+              </button>
+              <button
+                type="button"
+                role="switch"
+                aria-checked="false"
+                value="25"
+              >
+                25%
+              </button>
+              <button
+                type="button"
+                role="switch"
+                aria-checked="false"
+                value="50"
+              >
+                50%
+              </button>
               <input
                 type="number"
-                id="tip"
+                name="custom-tip"
                 placeholder="Custom"
-                min="1"
-                max="100"
-                step="0.01"
-                onkeydown="return event.keyCode !== 69;"
+                aria-label="Custom tip"
               />
             </div>
-          </fieldset>
 
-          <!-- [3] People -->
-          <fieldset>
-            <legend>Number of People</legend>
-            <div>
-              <input
-                type="number"
-                id="people"
-                placeholder="0"
-                min="1"
-                onkeydown="return event.keyCode !== 69;"
-              />
-              <img src="images/icon-person.svg" alt="Avatar" />
-            </div>
-          </fieldset>
-        </div>
+            <label>
+              <strong class="title">Number of People</strong>
+              <strong role="alert">Can't be zero</strong>
+              <div class="input">
+                <input
+                  type="number"
+                  name="people-num"
+                  placeholder="0"
+                  onkeydown="event.key==='.' && event.preventDefault()"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="13"
+                  height="16"
+                  class="icon"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="#9EBBBD"
+                    d="M9.573 7.729c.406 0 .784.07 1.126.209.342.14.639.33.881.569.232.227.438.503.614.82a5.1 5.1 0 01.407.949c.097.312.178.654.242 1.016.062.359.105.699.126 1.011.02.307.031.624.031.945 0 .836-.259 1.512-.768 2.01-.504.492-1.17.742-1.98.742H2.748c-.81 0-1.477-.25-1.98-.742C.259 14.76 0 14.084 0 13.248c0-.322.01-.64.032-.945.02-.312.063-.652.126-1.01.063-.363.144-.705.242-1.017.1-.323.238-.643.407-.948.176-.318.382-.594.613-.821.243-.238.54-.43.882-.57.342-.138.72-.208 1.125-.208.16 0 .313.067.61.265.183.123.397.264.636.421.204.134.48.259.822.372.333.11.671.167 1.005.167a3.19 3.19 0 001.006-.167c.341-.113.618-.238.822-.372l.636-.42c.296-.2.45-.266.61-.266zM6.598 0C7.63 0 8.522.38 9.252 1.129s1.1 1.666 1.1 2.724c0 1.06-.37 1.976-1.1 2.725-.73.75-1.623 1.13-2.654 1.13-1.03 0-1.924-.38-2.653-1.13-.73-.749-1.1-1.666-1.1-2.725 0-1.058.37-1.975 1.1-2.724C4.675.379 5.567 0 6.598 0z"
+                  />
+                </svg>
+              </div>
+            </label>
+          </div>
 
-        <!-- Results -->
-        <div class="results">
-          <div>
+          <!-- [2] Results -->
+          <div class="results">
             <div class="tip-amount">
-              <p>Tip Amount<br /><span>/ person</span></p>
-              <div class="result"><small>$</small><span>0.00</span></div>
+              <p>Tip Amount<br /><small>/ person</small></p>
+              <input class="num" readonly value="$0.00" />
             </div>
 
             <div class="total">
-              <p>Total<br /><span>/ person</span></p>
-              <div class="result"><small>$</small><span>0.00</span></div>
+              <p>Total<br /><small>/ person</small></p>
+              <input class="num" readonly value="$0.00" />
             </div>
-          </div>
 
-          <input type="reset" disabled />
-        </div>
-      </form>
-    </div>
+            <button type="reset" name="reset" disabled>RESET</button>
+          </div>
+        </form>
+      </section>
+    </main>
 
     <script>
-      /* Global Variables */
-      const resetButton = document.querySelector("input[type=reset]"),
-        billVal = document.getElementById("bill"),
-        tipVal = document.getElementById("tip"),
-        peopleNum = document.getElementById("people"),
-        totalTip = document.querySelector(".results .tip-amount .result span"),
-        totalVal = document.querySelector(".results .total .result span");
+      const $ = document.querySelector.bind(document);
 
-      /* Helper Functions */
-      function showErrorMessage(target) {
-        const node = document.createElement("p");
-        const id = `${target.id}-msg`;
+      (function () {
+        const Modal = {
+          billVal: "",
+          tipVal: "",
+          peopleNum: "",
+        };
 
-        node.id = id;
-        node.className = "error-message";
-        node.textContent =
-          target.value === "0" ? "Can't be zero." : "Enter a valid number";
+        const Controller = {
+          getBillVal: () => Modal.billVal,
+          setBillVal: (val) => (Modal.billVal = val),
 
-        document.querySelectorAll(`#${id}`).length === 0 &&
-          target.parentElement.parentElement.appendChild(node);
-      }
-      function removeErrorMessage(target) {
-        const errorMsg = document.querySelector(`#${target.id}-msg`);
-        errorMsg !== null && errorMsg.remove();
-      }
+          getTipVal: () => Modal.tipVal,
+          setTipVal: (val) => (Modal.tipVal = val),
 
-      function toCurrency(val) {
-        const dataPrice = [
-          [10e45, "ak"],
-          [10e42, "aj"],
-          [10e39, "ai"],
-          [10e36, "ah"],
-          [10e33, "ag"],
-          [10e30, "af"],
-          [10e27, "ae"],
-          [10e24, "ad"],
-          [10e21, "ac"],
-          [10e18, "ab"],
-          [10e15, "aa"],
-          [10e12, "T"],
-          [10e9, "B"],
-          [10e6, "M"],
-          [10e3, "K"],
-        ];
+          getPeopleNum: () => Modal.peopleNum,
+          setPeopleNum: (val) => (Modal.peopleNum = val),
 
-        for (let i = 0; i < dataPrice.length; i++) {
-          const ele = dataPrice[i];
-          let price = val / ele[0];
+          reset: function () {
+            Controller.setBillVal("");
+            Controller.setTipVal("");
+            Controller.setPeopleNum("");
+          },
 
-          if (price > 1) {
-            return `${price.toFixed(2)}${ele[1]}`;
-            break;
-          }
-        }
-        return val.toFixed(2);
-      }
-      function showResults(checkedBtn) {
-        const tipValue = checkedBtn !== null ? checkedBtn.value : tipVal.value;
+          init: function () {
+            Views.init();
+          },
+        };
 
-        if (
-          billVal.checkValidity() &
-          tipVal.checkValidity() &
-          peopleNum.checkValidity() &
-          (billVal.value.length > 0) &
-          (peopleNum.value.length > 0) &
-          (tipValue.length > 0)
-        ) {
-          // Tip value per person
-          totalTip.textContent = toCurrency(
-            (billVal.value * (tipValue / 100)) / peopleNum.value
-          );
+        const Views = {
+          init: function () {
+            const calc = $(".calc");
+            const { falsySwitch, showResults, checker } = this.render;
+            const { setBillVal, setTipVal, setPeopleNum, reset } = Controller;
 
-          // Total payment per person
-          totalVal.textContent = toCurrency(
-            billVal.value / peopleNum.value + parseFloat(totalTip.textContent)
-          );
-        } else {
-          totalTip.textContent = "0.00";
-          totalVal.textContent = "0.00";
-        }
-      }
+            function handleInput(e, tracker) {
+              tracker(e.target.value);
+              checker();
+              showResults();
+            }
 
-      function formResetActions() {
-        resetButton.setAttribute("disabled", true);
-        document.querySelectorAll(".error-message").forEach((e) => e.remove());
-        totalTip.textContent = "0.00";
-        totalVal.textContent = "0.00";
-      }
-      function labelClickActions(e) {
-        const tipErrorMsg = document.querySelector("#tip-msg");
+            // [1] Bill Val
 
-        resetButton.removeAttribute("disabled"); // Enable reset button
-        tipVal.value.length ? (tipVal.value = null) : null; // Switch between radio btns & number input
-        tipErrorMsg !== null && tipErrorMsg.remove(); // Remove error message
-        showResults(document.getElementById(e.getAttribute("for"))); // Do the math!
-      }
+            calc.bill.oninput = (e) => {
+              handleInput(e, setBillVal);
+            };
 
-      /* App Logic */
-      document
-        .querySelectorAll("label")
-        .forEach((ele) => (ele.onclick = (e) => labelClickActions(e.target)));
+            // [2] Tip Val
 
-      document.querySelectorAll("input[type=number]").forEach((input, i) => {
-        input.addEventListener("keyup", (e) => {
-          let checkedBtn = document.querySelector("input[type=radio]:checked");
+            calc.querySelectorAll("button[role=switch]").forEach((btn) => {
+              btn.onclick = (e) => {
+                falsySwitch();
+                if (e.target.ariaChecked === "false") {
+                  calc["custom-tip"].value = "";
+                  e.target.ariaChecked = "true";
+                  handleInput(e, setTipVal);
+                }
+              };
+            });
 
-          // [1] Disable & Enable reset button
-          resetButton.disabled =
-            billVal.value.length ||
-            tipVal.value.length ||
-            peopleNum.value.length
-              ? false
-              : true;
+            calc["custom-tip"].oninput = (e) => {
+              e.target.value.length && falsySwitch();
+              handleInput(e, setTipVal);
+            };
 
-          // [2] Switch between radio btns & number input
-          (e.target.placeholder === "Custom") & (checkedBtn !== null) &&
-            (e.target.value.length ? (checkedBtn.checked = false) : null);
+            // [3] Num of People
 
-          // [3] Show & Remove error message
-          !e.target.checkValidity()
-            ? showErrorMessage(e.target)
-            : removeErrorMessage(e.target);
+            calc["people-num"].oninput = (e) => {
+              e.data === "." && e.preventDefault();
+              handleInput(e, setPeopleNum);
 
-          // [4] Do the math!
-          showResults(checkedBtn);
-        });
-      });
+              const parent = e.target.parentElement.parentElement;
+              e.target.value == 0 && e.target.value.length
+                ? parent.classList.add("error")
+                : parent.classList.remove("error");
+            };
+
+            // [4] Reset
+
+            calc.reset.onclick = (e) => {
+              reset();
+              falsySwitch();
+              setTimeout(() => {
+                e.target.setAttribute("disabled", "true");
+              }, 0);
+            };
+          },
+
+          render: {
+            falsySwitch: () => {
+              let checked = $(".calc").querySelector(
+                "button[aria-checked=true]"
+              );
+              if (checked) checked.ariaChecked = "false";
+            },
+
+            showResults: () => {
+              const tipNode = $(".tip-amount .num");
+              const totalNode = $(".total .num");
+              const { getBillVal, getTipVal, getPeopleNum } = Controller;
+              const currency = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+              });
+
+              if (
+                getBillVal().length &&
+                getTipVal().length &&
+                getPeopleNum().length
+              ) {
+                const valPerPerson = getBillVal() / getPeopleNum();
+                const tipVal = valPerPerson * (getTipVal() / 100);
+                const totalVal = valPerPerson + tipVal;
+
+                tipNode.value = currency.format(tipVal);
+                totalNode.value = currency.format(totalVal);
+              }
+            },
+
+            checker: () => {
+              const reset = $(".calc").reset;
+              const { getBillVal, getTipVal, getPeopleNum } = Controller;
+
+              if (
+                getBillVal().length ||
+                getTipVal().length ||
+                getPeopleNum().length
+              ) {
+                reset.removeAttribute("disabled");
+              } else {
+                reset.setAttribute("disabled", "true");
+              }
+            },
+          },
+        };
+
+        Controller.init();
+      })();
     </script>
   </body>
 </html>
