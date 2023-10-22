@@ -58,6 +58,15 @@
         color: var(--gray);
       }
 
+      /* Utilities */
+
+      .sr-only {
+        width: 1px;
+        height: 1px;
+        position: absolute;
+        clip: rect(0 0 0 0);
+      }
+
       /* App style */
 
       .header {
@@ -223,6 +232,7 @@
   <body>
     <main class="app">
       <header class="header">
+        <h1 class="sr-only">Tip Calculator</h1>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="87"
